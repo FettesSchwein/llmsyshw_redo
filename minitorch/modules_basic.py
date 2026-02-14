@@ -83,7 +83,10 @@ class Dropout(Module):
             return x
         if not self.training:
             return x
-        mask = rand(x.shape, backend=x.backend) > self.p_dropout
+        mask = tensor_from_numpy(
+            (np.random.random(x.shape) > self.p_dropout).astype(np.float32),
+            backend=x.backend
+        )
         return x * mask / (1.0 - self.p_dropout)
         ### END ASSIGN3_2
 
