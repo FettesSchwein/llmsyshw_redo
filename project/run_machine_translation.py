@@ -309,8 +309,8 @@ def generate(
             )
             logits = model(idx=input_tensor)
             # Get logits for the last token: shape (1, seq_len, n_vocab) -> (n_vocab,)
-            last_logits = logits[0, len(token_ids) - 1]
-            gen_id = int(last_logits.to_numpy().argmax())
+            logits_np = logits.to_numpy()  # (1, seq_len, n_vocab)
+            gen_id = int(np.argmax(logits_np[0, len(token_ids) - 1]))
             # END ASSIGN3_4
 
             if gen_id == tokenizer.vocab[f'<eos_{tgt_key}>']:
@@ -347,7 +347,7 @@ def main(
     model_max_length=40,
     n_epochs=20,
     batch_size=128,
-    learning_rate=0.02,
+    learning_rate=0.002,
     samples_per_epoch=20000,
     n_vocab=10000,
     n_embd=256,
